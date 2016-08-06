@@ -48,27 +48,31 @@ The package can be installed as:
 
 To send confirmation email:
 
-    ```elixir
-    Shield.Notifier.Channel.Email.deliver(
-      ["recipient@example.com"],
-      :confirmation,
-      %{identity: "Recipient", confirmation_url: "https://xyz.com/con?t=1234"}
-    )
-    ```
+```elixir
+Shield.Notifier.Channel.Email.deliver(
+  ["recipient@example.com"],
+  :confirmation,
+  %{identity: "Recipient", confirmation_url: "https://xyz.com/con?t=1234"}
+)
+```
 
 To send password recovery email:
 
-    ```elixir
-    Shield.Notifier.Channel.Email.deliver(
-      ["recipient@example.com"],
-      :recover_password,
-      %{identity: "Recipient", recover_password_url: "https://xyz.com/rec?t=1op2"}
-    )
-    ```
+```elixir
+Shield.Notifier.Channel.Email.deliver(
+  ["recipient@example.com"],
+  :recover_password,
+  %{identity: "Recipient", recover_password_url: "https://xyz.com/rec?t=1op2"}
+)
+```
 
 ### Channel Implementation
 
-You may create your own channels using Shield.Notifier.Channel behaviour. All you need to implement a deliver function.
+If you need to create your own channels, you can create channels by using `Shield.Notifier.Channel` behaviour. All you need to implement a `deliver` function.
+
+```elixir
+deliver(recipients :: list, template :: atom, data :: any) :: any
+```
 
 ## Contributing
 
