@@ -6,7 +6,6 @@ defmodule Shield.Notifier.Channel.Email do
 
   @behaviour Shield.Notifier.Channel
   @channel Map.get(Application.get_env(:shield_notifier, :channels), :email)
-  @app_title Application.get_env(:shield_notifier, :app_title)
 
   @moduledoc """
   Delivers email asyncronusly to receipents using template and template data.

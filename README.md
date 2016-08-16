@@ -10,7 +10,7 @@ The package can be installed as:
 
     ```elixir
     def deps do
-      [{:shield_notifier, "~> 0.1.0"}]
+      [{:shield_notifier, "~> 0.1.1"}]
     end
     ```
 
