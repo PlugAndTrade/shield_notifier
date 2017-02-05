@@ -3,12 +3,12 @@ defmodule Shield.Notifier.Mixfile do
 
   def project do
     [app: :shield_notifier,
-     version: "0.1.1",
+     version: "0.2.0",
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     description: description,
-     package: package,
+     description: description(),
+     package: package(),
      deps: deps()]
   end
 
@@ -18,8 +18,8 @@ defmodule Shield.Notifier.Mixfile do
   end
 
   defp deps do
-    [{:bamboo, "~> 0.7"},
-     {:credo, "~> 0.4.7", only: [:dev, :test]},
+    [{:bamboo, "~> 0.7 or ~> 0.8"},
+     {:credo, "~> 0.6.1", only: [:dev, :test]},
      {:ex_doc, ">= 0.0.0", only: :dev}]
   end
 

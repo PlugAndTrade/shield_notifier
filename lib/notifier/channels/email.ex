@@ -5,9 +5,8 @@ defmodule Shield.Notifier.Channel.Email do
   import Bamboo.Email
 
   @behaviour Shield.Notifier.Channel
-  @channel Map.get(Application.get_env(:shield_notifier, :channels), :email)
 
-  @moduledoc """
+  @doc """
   Delivers email asyncronusly to receipents using template and template data.
 
   ### Examples
@@ -25,37 +24,37 @@ defmodule Shield.Notifier.Channel.Email do
   """
   def deliver(recipients, template, data) do
     Enum.map(recipients,
-      fn recipient ->
-        Task.async(fn -> send_later(recipient, template, data) end) end)
+      fn recipient -> send_later(recipient, template, data) end)
   end
 
   defp send_later(recipient, template, data) do
     email = generate(recipient, template, data)
-    email
-    |> Shield.Notifier.Mailer.deliver_later
+    Shield.Notifier.Mailer.deliver_later(email)
   end
 
   defp generate(recipient, :confirmation, data) do
-    base_email
+    base_email()
     |> to({recipient, recipient})
     |> subject("Email Confirmation")
-    |> text_body(replace(confirmation_template, data))
+    |> text_body(replace(confirmation_template(), data))
+  end
+  defp generate(recipient, :recover_password, data) do
+    base_email()
+    |> to({recipient, recipient})
+    |> subject("Password Recovery")
+    |> text_body(replace(recover_password_template(), data))
   end
 
-  defp confirmation_template, do: "Welcome {{identity}}!
+  defp confirmation_template() do
+    "Welcome {{identity}}!
 
 You can confirm your account through the link below:
 
 [Confirm my account]({{confirmation_url}})"
-
-  defp generate(recipient, :recover_password, data) do
-    base_email
-    |> to({recipient, recipient})
-    |> subject("Password Recovery")
-    |> text_body(replace(recover_password_template, data))
   end
 
-  defp recover_password_template, do: "Hello {{identity}}!
+  defp recover_password_template() do
+    "Hello {{identity}}!
 
 Someone has requested a link to change your password, and you can do this through the link below.
 
@@ -63,15 +62,15 @@ Someone has requested a link to change your password, and you can do this throug
 
 If you didn't request this, please ignore this email.
 Your password won't change until you access the link above and create a new one."
+  end
 
   defp replace(template, data) do
-    {data, template} = Enum.map_reduce(data, template, fn({k, v}, template) ->
+    {_data, template} = Enum.map_reduce(data, template, fn({k, v}, template) ->
       {{k, v}, String.replace(template, "{{#{k}}}", v)} end)
     template
   end
 
-  defp base_email do
-    new_email
-    |> from(Map.get(@channel, :from))
+  defp base_email() do
+    from(new_email(), Shield.Notifier.Config.email())
   end
 end
