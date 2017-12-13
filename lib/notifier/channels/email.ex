@@ -16,7 +16,7 @@ defmodule Shield.Notifier.Channel.Email do
       body: Path.join(Application.app_dir(:shield_notifier), "priv/templates/recover_password_template.txt")
     }
   }
-  @email_templates Application.get_env(:shield_notifier, :templates, @default_templates)
+  @email_templates Map.merge(@default_templates, Application.get_env(:shield_notifier, :templates, %{}))
     |> Enum.map(fn {type, template} -> {type, Map.update!(template, :body, &File.read!/1)} end)
     |> Map.new
 
