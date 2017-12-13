@@ -1,0 +1,7 @@
+Welcome {{identity}}!
+
+Test confirmation template.
+
+You can confirm your account through the link below:
+
+[Confirm my account]({{confirmation_url}})

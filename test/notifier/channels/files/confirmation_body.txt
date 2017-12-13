@@ -1,0 +1,7 @@
+Welcome to@example.com!
+
+Test confirmation template.
+
+You can confirm your account through the link below:
+
+[Confirm my account](https://example.com/confirm-email?token=12345)

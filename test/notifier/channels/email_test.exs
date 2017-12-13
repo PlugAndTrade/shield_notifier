@@ -2,6 +2,11 @@ defmodule Shield.Notifier.Channel.EmailTest do
   use ExUnit.Case
   use Bamboo.Test
 
+  @confirmation_body [__DIR__, "files/confirmation_body.txt"] |> Path.join |> File.read!
+  @confirmation_subject Application.get_env(:shield_notifier, :templates)[:confirmation][:subject]
+  @recover_password_body [__DIR__, "files/recover_password_body.txt"] |> Path.join |> File.read!
+  @recover_password_subject Application.get_env(:shield_notifier, :templates)[:recover_password][:subject]
+
   test "confirmation email" do
     to = "to@example.com"
     data = %{identity: to,
@@ -12,10 +17,8 @@ defmodule Shield.Notifier.Channel.EmailTest do
       |> List.first
 
     assert email.to == [{to, to}]
-    assert email.subject == "Email Confirmation"
-    assert email.text_body =~ "Welcome to@example.com!\n\nYou can confirm your \
-account through the link below:\n\n[Confirm my account]\
-(https://example.com/confirm-email?token=12345)"
+    assert email.subject == @confirmation_subject
+    assert email.text_body =~ @confirmation_body
   end
 
   test "recover password email" do
@@ -28,12 +31,7 @@ account through the link below:\n\n[Confirm my account]\
       |> List.first
 
     assert email.to == [{to, to}]
-    assert email.subject == "Password Recovery"
-    assert email.text_body =~ "Hello to@example.com!\n\n\
-Someone has requested a link to change your password, and you can do this \
-through the link below.\n\n[Change my password](https://example.com/\
-recover-password?token=12345)\n\nIf you didn't request this, please \
-ignore this email.\nYour password won't change until you access the link \
-above and create a new one."
+    assert email.subject == @recover_password_subject
+    assert email.text_body =~ @recover_password_body
   end
 end

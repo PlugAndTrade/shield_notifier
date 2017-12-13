@@ -10,6 +10,16 @@ config :shield_notifier,
         email: {:system, "APP_FROM_EMAIL", "no-reply@localhost"}
       }
     }
+  },
+  templates: %{
+    confirmation: %{
+      subject: "Email Confirmation",
+      body: Path.join(__DIR__, "../priv/templates/confirmation_template.txt")
+    },
+    recover_password: %{
+      subject: "Password Recovery",
+      body: Path.join(__DIR__, "../priv/templates/recover_password_template.txt")
+    }
   }
 
 import_config "#{Mix.env}.exs"
