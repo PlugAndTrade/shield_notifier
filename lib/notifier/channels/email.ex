@@ -6,7 +6,17 @@ defmodule Shield.Notifier.Channel.Email do
 
   @behaviour Shield.Notifier.Channel
 
-  @email_templates Application.get_env(:shield_notifier, :templates)
+  @default_templates %{
+    confirmation: %{
+      subject: "Email Confirmation",
+      body: Path.join(Application.app_dir(:shield_notifier), "priv/templates/confirmation_template.txt")
+    },
+    recover_password: %{
+      subject: "Password Recovery",
+      body: Path.join(Application.app_dir(:shield_notifier), "priv/templates/recover_password_template.txt")
+    }
+  }
+  @email_templates Application.get_env(:shield_notifier, :templates, @default_templates)
     |> Enum.map(fn {type, template} -> {type, Map.update!(template, :body, &File.read!/1)} end)
     |> Map.new
 
